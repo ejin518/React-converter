@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="root"></div>
+</body>
+<script src="https://unpkg.com/react@17.0.2/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/prop-types@15.7.2/prop-types.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script type="text/babel"> 
+    function Btn({text, changeValue, fontSize = 10}) { //props는 오브젝트이기 때문에 생략하고 바로 중괄호를 넣어서 {text} 를 입력하여 오브젝트로부터 property를 가져올 수 있다. (props)
+    //fontSize에 기본값을 줄 수 있다. 
+    console.log(text, "was rendered");
+        return (
+            <button 
+            onClick={changeValue}
+            style={{
+               backgroundColor: "tomato",
+               color:"white",
+               padding:"10px 20px",
+               border: 0,
+               borderRadius: 10,
+               fontSize: fontSize,  //둘의 이름이 같기 때문에 fontSize 하나만 써줘도 된다. fontSize,
+            }}>{text}</button> //{props.text}
+        )
+    }
+    const MemorizedBtn = React.memo(Btn);
+    MemorizedBtn.propTypes = {
+        text: PropTypes.string.isRequired,
+        fontSize: PropTypes.number,
+    };
+    function App() {
+        const [value, setValue] = React.useState("Save Changes")
+        const changeValue = () => {
+            setValue("Revert Change");
+        }
+        return (
+        <div>
+            <MemorizedBtn text={value} changeValue={changeValue} fontSize={18}/>
+            <MemorizedBtn text="Continue"/>
+         </div>
+        );  
+    };
+    const root = document.getElementById("root");
+    ReactDOM.render(<App />, root);
+</script>
+</html>

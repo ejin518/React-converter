@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="root"></div>
+</body>
+<script src="https://unpkg.com/react@17.0.2/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/prop-types@15.7.2/prop-types.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script type="text/babel"> 
+    function Title() {
+        return(
+            <div class="title-wrap"
+            style={{
+                margin:"50px 0",
+                textAlign:"center",
+            }}>
+                <h1
+                style={{
+                    color:"#606060",
+                }}>Currency Converter</h1>
+            </div>
+        );
+    };
+    function Selector({index, onChange}) {
+        return(
+            <div class="select-wrap"
+            style={{
+                textAlign:"center",
+                marginBottom:"50px",
+            }}>
+                <select value={index} onChange={onChange}
+                style={{
+                    padding:"10px",
+                    width:"50%",
+                    border:0,
+                    borderRadius:"10px",
+                    backgroundColor:"#8F8FDD",
+                    color:"white",
+                    boxShadow:"3px 3px 6px rgba(0,0,0,0.5)",
+                }}>
+                    <option value="0">USA</option>
+                    <option value="1">New Zealand</option>
+                </select>
+            </div>  
+        )   
+    };
+    function NzToKor({amount, changeAmount, reverse}) {
+       
+        return(
+            <div style={{
+                    maxWidth:"600px",
+                    margin:"0 auto",
+                }}>
+                <dl style={{
+                    display:"table",
+                    width:"100%",
+                }}>
+                <dt style={{
+                        display:"table-sell",
+                        width:"20%",
+                    }}>
+                    <label for="">NZD</label>
+                </dt>
+                <dd style={{
+                        display:"table-cell",
+                        width:"70%",
+                    }}>
+                    <input style={{
+                        width:"100%",
+                        border:0,
+                        padding:"7px 13px",
+                        borderRadius:"10px",
+                    }}
+                    type="number" value={reverse ? (amount / 810).toFixed(2) : amount} onChange={changeAmount} disabled={reverse} placeholder="$"/>
+                </dd>  
+                    
+                </dl>
+                <dl style={{
+                    display:"table",
+                    width:"100%",
+                }}>
+                <dt style={{
+                        display:"table-sell",
+                        width:"20%",
+                    }}>
+                    <label for="">KRW</label>
+                </dt>
+                <dd style={{
+                        display:"table-cell",
+                        width:"70%",
+                    }}>
+                    <input style={{
+                        width:"100%",
+                        border:0,
+                        padding:"7px 13px",
+                        borderRadius:"10px",
+                    }}
+                    type="number" value={reverse ? amount : amount*810} onChange={changeAmount} disabled={!reverse} placeholder="₩"/>
+                </dd>  
+                </dl>
+            </div>  
+        )
+    };
+    function UsaToKor({amount, changeAmount, reverse}) {
+       
+       
+        return(
+            <div style={{
+                    maxWidth:"600px",
+                    margin:"0 auto",
+                }}>
+                <dl style={{
+                    display:"table",
+                    width:"100%",
+                }}>
+                <dt style={{
+                        display:"table-sell",
+                        width:"20%",
+                    }}>
+                    <label for="">USD</label>
+                </dt>
+                <dd style={{
+                        display:"table-cell",
+                        width:"70%",
+                    }}>
+                    <input style={{
+                        width:"100%",
+                        border:0,
+                        padding:"7px 13px",
+                        borderRadius:"10px",
+                    }}
+                    type="number" value={reverse ? (amount / 1270).toFixed(2) : amount} onChange={changeAmount} disabled={reverse} placeholder="$"/>
+                </dd>  
+                    
+                </dl>
+                <dl style={{
+                    display:"table",
+                    width:"100%",
+                }}>
+                <dt style={{
+                        display:"table-sell",
+                        width:"20%",
+                    }}>
+                    <label for="">KRW</label>
+                </dt>
+                <dd style={{
+                        display:"table-cell",
+                        width:"70%",
+                    }}>
+                    <input style={{
+                        width:"100%",
+                        border:0,
+                        padding:"7px 13px",
+                        borderRadius:"10px",
+                    }}
+                    type="number" value={reverse ? amount : amount*1270} onChange={changeAmount} disabled={!reverse} placeholder="₩"/>
+                </dd>  
+                </dl>
+            </div>  
+        )
+    };
+    function Btn({onClick}) {
+        return(
+            <div style={{
+                    marginTop:"20px",
+                    textAlign:"center",
+                }}>
+                    <button style={{
+                        padding:"7px 13px",
+                        border:0,
+                        backgroundColor:"tomato",
+                        borderRadius:"10px",
+                        color:"white",
+                    }}onClick={onClick}>Reverse</button>
+                </div>
+        )
+        
+    }
+    function App() {
+        
+        const [index, setIndex] = React.useState("0");
+        const [amount, setAmount] = React.useState(0);
+        const [reverse, setReverse] = React.useState(false);
+        const onReverse = () => {
+            setReverse((current) => !current);
+            setAmount(0);
+        }
+        
+        function onSelect(event){
+            setIndex(event.target.value);
+            setAmount(0);
+        }
+        const onChange = (event) => {
+            setAmount(event.target.value);
+        }
+       
+        return (
+        <div>
+            <Title />
+            <Selector index={index} onChange={onSelect}/>
+            <div class="convert-wrap">
+                {index === "0" ? <UsaToKor amount={amount} changeAmount={onChange} reverse={reverse}/> : null}
+                {index === "1" ? <NzToKor amount={amount} changeAmount={onChange} reverse={reverse}/> : null}
+            </div>
+            <Btn onClick={onReverse}/>
+         </div>
+        );  
+    };
+    const root = document.getElementById("root");
+    ReactDOM.render(<App />, root);
+</script>
+</html>
